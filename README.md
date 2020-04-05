@@ -71,15 +71,14 @@ Install docker from armbian-config > Software > Softy > Docker
 
 ## Nextcloudpi
 ### USB flash drive prep
-(Properly align partition on USB flash drive using fdisk and start sector 2048)(This is also done with the formatting)
-
-
-sudo mkfs.btrfs -f /dev/sda
+#### format as BTRFS
+```
+sudo mkfs.btrfs -L USBDRIVE -f /dev/sda
 btrfs-progs v4.15.1
 See http://btrfs.wiki.kernel.org for more information.
 
-Label:              (null)
-UUID:               baff3bbd-21d8-47d2-8c81-41af436f06c0
+Label:              USBDRIVE
+UUID:               abfdb7fb-bf06-433e-abad-7fc3437c7c51
 Node size:          16384
 Sector size:        4096
 Filesystem size:    57.30GiB
@@ -93,9 +92,51 @@ Block group profiles:
       Devices:
          ID        SIZE  PATH
              1    57.30GiB  /dev/sda
+```
 
-Make mount point
-sudo mkdir /media/ncp
-Add this to /etc/fstab
-UUID=baff3bbd-21d8-47d2-8c81-41af436f06c0 /media/ncp btrfs rw,users 0 0
+#### mounting
+Create mount point
+```
+sudo mkdir /media/usb0
+```
+Add entry to `/etc/fstab`
+```
+UUID=abfdb7fb-bf06-433e-abad-7fc3437c7c51 /media/usb0 btrfs users,rw,exec 0 0
+```
 mount as user
+```
+mount /media/usb0
+```
+Change the external drive's owner to local user.
+```
+sudo chown daniel:daniel /media/ncp
+```
+
+##### Permission probs
+Make sure that the user has execute rights in the folder that will be used for NextCloud, i.e. the drive must be mounted with `exec` and the 
+Local user must have write and execution rights, i.e. the drive must be mounted using the `exec,rw` options and the directory must have write and execution rights. Otherwise 'Permission denied' errors will pop up when trying to use the NextCloudPi docker.
+```
+otherwise permission denied
+sudo docker logs -f nextcloudpi
+Initializing empty volume..
+Making /usr/local/etc/ncp-config.d persistent ...
+Making /etc/services-enabled.d persistent ...
+Making /etc/letsencrypt persistent ...
+Making /etc/shadow persistent ...
+Making /etc/cron.d persistent ...
+Making /etc/cron.daily persistent ...
+Making /etc/cron.hourly persistent ...
+Making /etc/cron.weekly persistent ...
+Making /usr/local/bin persistent ...
+/run-parts.sh: line 47: /etc/services-enabled.d/010lamp: Permission denied
+/run-parts.sh: line 47: /etc/services-enabled.d/020nextcloud: Permission denied
+Init done
+/run-parts.sh: line 6: /etc/services-enabled.d/020nextcloud: Permission denied
+/run-parts.sh: line 6: /etc/services-enabled.d/010lamp: Permission denied
+/run-parts.sh: line 6: /etc/services-enabled.d/000ncp: Permission denied
+/run-parts.sh: line 42: /etc/services-enabled.d/000ncp: Permission denied
+/run-parts.sh: line 47: /etc/services-enabled.d/010lamp: Permission denied
+/run-parts.sh: line 47: /etc/services-enabled.d/020nextcloud: Permission denied
+Init done
+```
+
