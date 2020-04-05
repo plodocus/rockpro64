@@ -69,4 +69,33 @@ armbian-config > network
 
 Install docker from armbian-config > Software > Softy > Docker
 
+## Nextcloudpi
+### USB flash drive prep
+(Properly align partition on USB flash drive using fdisk and start sector 2048)(This is also done with the formatting)
 
+
+sudo mkfs.btrfs -f /dev/sda
+btrfs-progs v4.15.1
+See http://btrfs.wiki.kernel.org for more information.
+
+Label:              (null)
+UUID:               baff3bbd-21d8-47d2-8c81-41af436f06c0
+Node size:          16384
+Sector size:        4096
+Filesystem size:    57.30GiB
+Block group profiles:
+  Data:             single            8.00MiB
+    Metadata:         DUP               1.00GiB
+      System:           DUP               8.00MiB
+      SSD detected:       no
+      Incompat features:  extref, skinny-metadata
+      Number of devices:  1
+      Devices:
+         ID        SIZE  PATH
+             1    57.30GiB  /dev/sda
+
+Make mount point
+sudo mkdir /media/ncp
+Add this to /etc/fstab
+UUID=baff3bbd-21d8-47d2-8c81-41af436f06c0 /media/ncp btrfs rw,users 0 0
+mount as user
