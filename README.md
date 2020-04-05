@@ -140,3 +140,21 @@ Init done
 Init done
 ```
 
+### NextCloudPi using the docker image
+#### Docker
+Pull the image
+```
+sudo docker pull ownyourbits/nextcloudpi
+```
+
+Create and run new container
+```
+sudo docker run -d -p 4443:4443 -p 443:443 -p 80:80 -v /media/usb0/ncp:/data --name nextcloudpi ownyourbits/nextcloudpi 192.168.178.64
+```
+This creates a detached (`-d`) container called 'nextcloudpi'.
+Guest ports 4443, 443 and 80 are mapped to the same ports of the host OS.
+Guest directory `/data` is mapped to host directory `/media/usb0/ncp`.
+IP 192.168.178.64 is added to the trusted domains of nextcloud.
+
+
+Wait for 'Init done' in `sudo docker logs -f nextcloudpi`. This will take a few minutes.
