@@ -158,3 +158,26 @@ IP 192.168.178.64 is added to the trusted domains of nextcloud.
 
 
 Wait for 'Init done' in `sudo docker logs -f nextcloudpi`. This will take a few minutes.
+
+#### Setup NextCloudpi
+Access NextCloudPi instance by typing the RockPro's IP into the browser.
+There will probably be a certificate error.
+A website with the NextCloudPi user and password and the NextCloud user and password will appear. Save the passwords and click 'activate'. The page reloads and there is another certificate error. Log in using the NCP user (the first password from the page before).
+##### NextCloudPi configuration wizard
+Forward ports 80 and 443 in FritzBox: Internet > Freigaben > rockpro64
+IPv6 Interface ID: last four groups of first ip6 address given by ip -6 addr
+
+DDNS: DuckDNS is not available in the wizard. Click 'skip' and manually configure it in the web panel under networking duckdns.
+Needs to be set to ipv6:
+```
+curl --url "https://www.duckdns.org/update?domains={subdomain}&token={token}&ipv6={ip6}&verbose=true"
+```
+Put this into a script that is run on reconnect.
+
+When I visited mydomain.duckdns.org from outside my network (mobile internet, VPN), I could access NextCloud.
+To be able to access it via the name from within the network I needed to add an exception for the domain in the FritzBox: DNS Rebind exception.
+
+##### Let's Encrypt
+Easy to use within NextCloudPi, but does only single domains, no wildcard certificates.
+Need to probably disable it in NextCloudPi and do a wildcard certification outside.
+Write a cron job that runs every x days.
