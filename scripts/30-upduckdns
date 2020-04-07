@@ -1,0 +1,11 @@
+#!/bin/sh
+# This updates the duckdns.org IP6 when the network is up (for example after boot and after reconnect)
+# Put this into /etc/NetworkManager/dispatcher.d
+
+export LC_ALL=C
+
+if [ "$2" = "up" ]; then
+	/home/daniel/duckdns/update_ip.sh
+fi
+
+exit 0

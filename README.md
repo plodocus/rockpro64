@@ -167,12 +167,14 @@ A website with the NextCloudPi user and password and the NextCloud user and pass
 Forward ports 80 and 443 in FritzBox: Internet > Freigaben > rockpro64
 IPv6 Interface ID: last four groups of first ip6 address given by ip -6 addr
 
-DDNS: DuckDNS is not available in the wizard. Click 'skip' and manually configure it in the web panel under networking duckdns.
-Needs to be set to ipv6:
-```
-curl --url "https://www.duckdns.org/update?domains={subdomain}&token={token}&ipv6={ip6}&verbose=true"
-```
-Put this into a script that is run on reconnect.
+###### DDNS
+DuckDNS is actually not available in the wizard.
+The implementation in the NCP dashboard only supports duckdns.org's automatic IPv4 detection.
+A custom script `update_ip.sh` calls the URL to set the IPv6 on connect.
+This script expects the files `token` and `domains` that contain the access token and a comma separated list of subdomains.
+Furthermore it uses `get_ip.sh` that returns the first global inet6 address of `eth0`.
+`update_ip.sh` is called by a NetworkManager dispatcher script if the network is up.
+Make sure all of these scripts are executable.
 
 When I visited mydomain.duckdns.org from outside my network (mobile internet, VPN), I could access NextCloud.
 To be able to access it via the name from within the network I needed to add an exception for the domain in the FritzBox: DNS Rebind exception.
