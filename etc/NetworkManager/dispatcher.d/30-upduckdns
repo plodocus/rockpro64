@@ -5,7 +5,7 @@
 export LC_ALL=C
 
 if [ "$2" = "up" ]; then
-	/home/daniel/duckdns/update_ip.sh
+	duckdns_update_ip6.sh
 fi
 
 exit 0

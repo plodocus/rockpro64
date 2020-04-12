@@ -170,10 +170,8 @@ IPv6 Interface ID: last four groups of first ip6 address given by ip -6 addr
 ###### DDNS
 DuckDNS is actually not available in the wizard.
 The implementation in the NCP dashboard only supports duckdns.org's automatic IPv4 detection.
-A custom script `update_ip.sh` calls the URL to set the IPv6 on connect.
-This script expects the files `token` and `domains` that contain the access token and a comma separated list of subdomains.
-Furthermore it uses `get_ip.sh` that returns the first global inet6 address of `eth0`.
-`update_ip.sh` is called by a NetworkManager dispatcher script if the network is up.
+Create a NetworkManager dispatcher script in `/etc/NetworkManager/dispatcher.d/30-upduckdns` that executes `/usr/local/bin/duckdns_update_ip6.sh` on every reconnect.
+This script gets the current IP6 and updates the DNS entry using `/etc/duckdns.org/token` and `/etc/duckdns.org/domains`.
 Make sure all of these scripts are executable.
 
 When I visited mydomain.duckdns.org from outside my network (mobile internet, VPN), I could access NextCloud.
