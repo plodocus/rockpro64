@@ -178,6 +178,21 @@ When I visited mydomain.duckdns.org from outside my network (mobile internet, VP
 To be able to access it via the name from within the network I needed to add an exception for the domain in the FritzBox: DNS Rebind exception.
 
 ##### Let's Encrypt
-Easy to use within NextCloudPi, but does only single domains, no wildcard certificates.
-Need to probably disable it in NextCloudPi and do a wildcard certification outside.
-Write a cron job that runs every x days.
+Currently NextCloudPi doesn't support wildcard certificates, so this has to be done externally.
+Install `certbot` per their instructions and run this command.
+```
+sudo certbot certonly \
+    --manual \
+    --manual-public-ip-logging-ok \
+    --non-interactive \
+    --agree-tos \
+    -m <name@email.com> \
+    --preferred-challenges dns \
+    --domains <single_domain> \
+    --manual-auth-hook /usr/local/bin/certbot_authenticator.sh \
+    --manual-cleanup-hook /usr/local/bin/certbot_cleanup.sh \
+    --server https://acme-v02.api.letsencrypt.org/directory
+```
+This has to be done once each for `yourdomain.duckdns.org` and `*.yourdomain.duckdns.org` because DuckDNS doesn't appear to support multiple TXT records.
+The scripts `certbot_authenticator.sh` and `certbot_cleanup.sh` put the TXT record at `_acme-challenge.yourdomain.duckdns.org` and clears them after authentication.
+If authentication was successful, certbot should have created a cronjob for renewal.
