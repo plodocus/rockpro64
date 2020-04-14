@@ -1,0 +1,8 @@
+[Unit]
+Description=Listen for new LetsEncrypt certificates and concatenate
+
+[Service]
+ExecStart=/usr/local/bin/on_new_certificate_concatenate.sh
+
+[Install]
+WantedBy=multi-user.target
