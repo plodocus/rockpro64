@@ -191,9 +191,15 @@ A dynamic DNS service maps a (sub)domain to a dynamically changing IP.
 With DuckDNS you get a subdomain like "subdomain.duckdns.org".
 I chose this service because it supports IP6 and the modification of TXT records, which will be necessary for the type of certificate challenge that I am using.
 
-Create a NetworkManager dispatcher script in `/etc/NetworkManager/dispatcher.d/30-upduckdns` that executes `/usr/local/bin/duckdns_update_ip6.sh` on every reconnect.
+When my router's internet connection is disconnected (power outage or regular reset by ISP) my IPv6 prefix changes.
+This requires updating the IPv6 that duckdns is pointing to.
+The service `ip6_prefix_detector` monitors the network adapter for deleted IPv6 addresses - which is indicative of IPv6 prefix changes - and runs `/usr/local/bin/duckdns_update_ip6.sh`.
 This script gets the current IP6 and updates the DNS entry using `/etc/duckdns.org/token` and `/etc/duckdns.org/domains`.
 Make sure all of these scripts are executable.
+Start the service with
+```
+systemctl enable ip6_prefix_detector.sh
+```
 
 #### DNS rebind protection
 When I visited "mydomain.duckdns.org" from outside my network (mobile internet, VPN) I could access the web servers but not from inside the network.

@@ -1,0 +1,8 @@
+[Unit]
+Description=Listen for IPv6 prefix changes and trigger IPv6 address update at duckdns.org.
+
+[Service]
+ExecStart=/usr/local/bin/ip6prefix_change_trigger.sh 
+
+[Install]
+WantedBy=multi-user.target
