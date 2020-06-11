@@ -310,3 +310,19 @@ sudo docker run \
     --restart unless-stopped \
     linuxserver/grocy
 ```
+
+## CalibreWeb
+```
+docker run \
+    -d \
+    --name=calibre-web \
+    -e PUID=1000 \
+    -e PGID=1000 \
+    -e TZ=Europe/Berlin \
+    -e DOCKER_MODS=linuxserver/calibre-web:calibre \
+    -v /media/usb0/calibre-web:/config \
+    -v /media/usb0/calibre-db:/books \
+    --net=foonet
+    --restart unless-stopped \
+    linuxserver/calibre-web
+```
