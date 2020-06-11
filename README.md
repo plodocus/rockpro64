@@ -172,6 +172,16 @@ sudo chown daniel:daniel /media/ncp
 My internet provider uses DS-Lite which means that I can only use IP6 to access my server from the internet.
 This setup is behind a FritzBox router, so other routers will require slightly different configurations than explained below.
 I recommend using tiny webservers for testing the network configuration, like `hypriot/rpi-busybox-httpd` and `containous/whoami`.
+
+### Disable IPv6 privacy extensions
+IPv6 privacy extensions are great for browsing the internet but bad if you want to run a server that you want to easily access.
+Disable them so that IPv6s are generated based on the network interface's MAC address:
+```
+sudo nmcli connection modify 'Wired connection 1' ipv6.ip6-privacy 0
+sudo nmcli connection modify 'Wired connection 1' ipv6.addr-gen-mode 0
+```
+Reset the connection and delete persistent/stale addresses.
+
 ### Forward ports in router
 Expose the containers'  ports 80 to the host's ports 80 and 443 to test the port forwarding, like
 ```
