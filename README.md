@@ -342,3 +342,16 @@ docker run \
     --restart unless-stopped \
     linuxserver/calibre-web
 ```
+
+## Wallabag
+```
+sudo docker run \
+	-d \
+	--name wallabag \
+	-v /media/usb0/wallabag/data:/var/www/wallabag/data \
+	-v /media/usb0/wallabag/images:/var/www/wallabag/web/assets/images \
+	--net=foonet \
+	-e SYMFONY__ENV__DOMAIN_NAME='https://wallabag.<subdomain>.duckdns.org' \
+	leolivier/wallabag:armv7-rpi
+```
+`SYMFONY__ENV__DOMAIN_NAME` important. Otherwise no styling in Web UI.
