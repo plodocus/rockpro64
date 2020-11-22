@@ -1,0 +1,17 @@
+---
+version: "2.1"
+services:
+  calibre-web:
+    image: linuxserver/grocy
+    container_name: grocy
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Berlin
+    volumes:
+      - /media/usb0/grocy:/config
+    restart: unless-stopped
+networks:
+    default:
+        external:
+            name: foonet

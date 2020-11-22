@@ -1,0 +1,17 @@
+---
+version: "3.2"
+services:
+  hpx:
+    image: haproxy:alpine
+    container_name: hpx
+    volumes:
+      - /etc/haproxy:/usr/local/etc/haproxy:ro
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    entrypoint: haproxy -f /usr/local/etc/haproxy/haproxy.cfg
+networks:
+    default:
+        external:
+            name: foonet

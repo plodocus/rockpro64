@@ -1,0 +1,17 @@
+---
+version: "2.1"
+services:
+  calibre-web:
+    image: leolivier/wallabag:armv7-rpi
+    container_name: wallabag
+    environment:
+        # If this is not set there is no styling in Web UI
+      - SYMFONY__ENV__DOMAIN_NAME='https://wallabag.<subdomain>.duckdns.org'
+    volumes:
+      - /media/usb0/wallabag/data:/var/www/wallabag/data
+      - /media/usb0/wallabag/images:/var/www/wallabag/web/assets/images
+    restart: unless-stopped
+networks:
+    default:
+        external:
+            name: foonet

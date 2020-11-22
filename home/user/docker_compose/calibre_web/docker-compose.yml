@@ -1,0 +1,19 @@
+---
+version: "2.1"
+services:
+  calibre-web:
+    image: linuxserver/calibre-web
+    container_name: calibre-web
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Berlin
+      - DOCKER_MODS=linuxserver/calibre-web:calibre
+    volumes:
+      - /media/usb0/calibre-web:/config
+      - /media/usb0/calibre-db:/books
+    restart: unless-stopped
+networks:
+    default:
+        external:
+            name: foonet

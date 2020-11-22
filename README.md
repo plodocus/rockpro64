@@ -262,16 +262,7 @@ Create a common docker network, re-run the test servers without exposing their p
 sudo docker network create foonet
 sudo docker run --name web0 --net=foonet hypriot/rpi-busybox-httpd
 sudo docker run --name web1 --net=foonet containous/whoami
-sudo docker run \
-    -d \
-    --name hpx \
-    -p 80:80 \
-    -p 443:443 \
-    --net=foonet \
-    -v /etc/haproxy:/usr/local/etc/haproxy:ro \
-    --restart unless-stopped
-    haproxy:alpine \
-    haproxy -f /usr/local/etc/haproxy/haproxy.cfg
+sudo docker-compose -f ~/docker_compose/haproxy/docker-compose.yml up -d
 ```
 
 HAProxy needs to be run as the last container!
@@ -312,46 +303,3 @@ The page reloads and there is another certificate error.
 Log in using the NCP user (the first password from the page before).
 
 Forced HTTPS should be disabled because HAProxy handles SSL termination.
-
-## Grocy
-```
-sudo docker run \
-    -d \
-    --name grocy \
-    -e PUID=1000 \
-    -e PGID=1000 \
-    -e TZ=Europe/Berlin \
-    -v /media/usb0/grocy/:/config \
-    --net=foonet \
-    --restart unless-stopped \
-    linuxserver/grocy
-```
-
-## CalibreWeb
-```
-docker run \
-    -d \
-    --name=calibre-web \
-    -e PUID=1000 \
-    -e PGID=1000 \
-    -e TZ=Europe/Berlin \
-    -e DOCKER_MODS=linuxserver/calibre-web:calibre \
-    -v /media/usb0/calibre-web:/config \
-    -v /media/usb0/calibre-db:/books \
-    --net=foonet
-    --restart unless-stopped \
-    linuxserver/calibre-web
-```
-
-## Wallabag
-```
-sudo docker run \
-	-d \
-	--name wallabag \
-	-v /media/usb0/wallabag/data:/var/www/wallabag/data \
-	-v /media/usb0/wallabag/images:/var/www/wallabag/web/assets/images \
-	--net=foonet \
-	-e SYMFONY__ENV__DOMAIN_NAME='https://wallabag.<subdomain>.duckdns.org' \
-	leolivier/wallabag:armv7-rpi
-```
-`SYMFONY__ENV__DOMAIN_NAME` important. Otherwise no styling in Web UI.
