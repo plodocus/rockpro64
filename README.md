@@ -2,6 +2,7 @@ Armbian Debian
 flashed buster legacy
 updated kernel to latest
 nextcloud php-imagick
+set nextcloud port to 10080 and forward via haproxy
 # Introduction
 Procedures to set up NextCloudPi, Grocy and CalibreWeb on the RockPro64.
 This is mainly intended as a log for myself so I can reproduce and debug more easily.
