@@ -1,3 +1,7 @@
+Armbian Debian
+flashed buster legacy
+updated kernel to latest
+nextcloud php-imagick
 # Introduction
 Procedures to set up NextCloudPi, Grocy and CalibreWeb on the RockPro64.
 This is mainly intended as a log for myself so I can reproduce and debug more easily.
@@ -220,7 +224,9 @@ Let's Encrypt provides free SSL certificates that are required for encrypted com
 I want to be able to access different web services by my own subdomains, like "cloud.mydomain.duckdns.org" and "grocy.mydomain.duckdns.org".
 For this, a wildcard certificate is needed, which requires the successful certification by DNS challenge.
 
-Install `certbot` per their instructions and run this command.
+Install `certbot` per their instructions. 
+This is now via snap, so preinstalled cerbot needs to be removed.
+Run this command.
 
 ```
 sudo certbot certonly \
