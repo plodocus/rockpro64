@@ -1,7 +1,7 @@
 ---
 version: "2.1"
 services:
-  calibre-web:
+  grocy:
     image: linuxserver/grocy
     container_name: grocy
     environment:

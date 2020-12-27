@@ -1,7 +1,7 @@
 ---
 version: "2.1"
 services:
-  calibre-web:
+  wallabag:
     image: leolivier/wallabag:armv7-rpi
     container_name: wallabag
     environment:
