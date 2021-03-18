@@ -51,3 +51,43 @@ Now /etc/hdparm.conf appended:
 }
 
 This spins down the disk after 24 * 5 = 120 seconds of idle.
+
+
+# rclone
+installation like
+```
+echo "deb http://packages.azlux.fr/debian/ buster main" | sudo tee /etc/apt/sources.list.d/azlux.list
+wget -qO - https://azlux.fr/repo.gpg.key | sudo apt-key add -
+sudo apt update
+sudo apt install rclone
+```
+https://github.com/rclone/rclone/issues/2153#issuecomment-583505201
+
+set-up 1fichier like https://rclone.org/fichier/
+do it as user restic (below, so that config is saved in correct home folder)
+name "onefiji"
+
+install restic
+setup restic user for rootless backup 
+https://restic.readthedocs.io/en/stable/080_examples.html#full-backup-without-root
+add user 
+```
+sudo useradd -m restic
+```
+change group and permissions for restic binary
+```
+sudo chown root:restic /usr/bin/restic
+sudo chmod 750 /usr/bin/restic
+```
+make folder `nc` in remote `onefiji`:
+`rclone mkdir onefiji:nc`
+initiate restic repo
+```
+sudo -u restic restic -r rclone:onefiji:nc init
+```
+this requires a password/phrase
+
+and backup!
+first add restic to group www-data so it can read contents of nc-data
+sudo usermod -a -G www-data restic
+sudo -u restic restic -r rclone:onefiji:nc --verbose backup /media/usb0/nc-data
