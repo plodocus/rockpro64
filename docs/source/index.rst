@@ -9,6 +9,8 @@ Welcome to homeserver-rockpro64's documentation!
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
+   
+   backup
 
 
 
@@ -16,5 +18,9 @@ Indices and tables
 ==================
 
 * :ref:`genindex`
-* :ref:`modindex`
+.. * :ref:`modindex`
 * :ref:`search`
+
+=================
+This is a heading
+=================
