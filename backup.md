@@ -67,7 +67,7 @@ set-up 1fichier like https://rclone.org/fichier/
 do it as user restic (below, so that config is saved in correct home folder)
 name "onefiji"
 
-install restic
+install restic,
 setup restic user for rootless backup 
 https://restic.readthedocs.io/en/stable/080_examples.html#full-backup-without-root
 add user 
@@ -76,18 +76,24 @@ sudo useradd -m restic
 ```
 change group and permissions for restic binary
 ```
-sudo chown root:restic /usr/bin/restic
-sudo chmod 750 /usr/bin/restic
+sudo chown root:restic ~restic/bin/restic
+sudo chmod 750 ~restic/bin/restic
 ```
 make folder `nc` in remote `onefiji`:
 `rclone mkdir onefiji:nc`
 initiate restic repo
 ```
-sudo -u restic restic -r rclone:onefiji:nc init
+sudo -u restic ~restic/bin/restic -r rclone:onefiji:nc init
 ```
 this requires a password/phrase
 
 and backup!
 first add restic to group www-data so it can read contents of nc-data
 sudo usermod -a -G www-data restic
-sudo -u restic restic -r rclone:onefiji:nc --verbose backup /media/usb0/nc-data
+sudo -u restic ~restic/bin/restic -r rclone:onefiji:nc --password-file=/home/restic/.config/restic/onefiji_nc --verbose backup /media/usb0/nc-data
+sudo -u restic ~restic/bin/restic -r rclone:onefiji:nc check --read-data-subset=1/20
+sudo -u restic ~restic/bin/restic -r rclone:onefiji:nc --verbose prune
+sudo -u restic ~restic/bin/restic --password-file=/home/restic/.config/restic/onefiji_nc -r rclone:onefiji:nc forget --keep-hourly=36 --keep-daily=14 --keep-monthly=12 --keep-yearly=10
+
+install mailutils to get mails if something fails
+sudo dpkg-reconfigure postfix
